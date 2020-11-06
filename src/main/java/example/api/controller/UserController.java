@@ -38,7 +38,7 @@ public class UserController {
 
     @PutMapping("/users/{id}")
     public void update(@PathVariable("id") long id, @RequestBody User user) throws SQLException {
-    	user.setId(id);
+        user.setId(id);
         userRepository.save(user);
     }
 
