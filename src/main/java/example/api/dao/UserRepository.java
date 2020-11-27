@@ -2,8 +2,6 @@ package example.api.dao;
 
 import org.springframework.data.repository.CrudRepository;
 
-import example.api.model.User;
-
 /**
  * Data access object for integrating with the data source
  * for storing and retrieving user data.
@@ -12,6 +10,6 @@ import example.api.model.User;
  * when the application is run using the 2 parameters of
  * {@link CrudRepository} as the entity and ID types.
  */
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<UserEntity, Long> {
 
 }

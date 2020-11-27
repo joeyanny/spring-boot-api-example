@@ -1,9 +1,12 @@
 package example.api.controller;
 
 import java.sql.SQLException;
-import java.util.Optional;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,38 +15,43 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import example.api.dao.UserRepository;
 import example.api.model.User;
+import example.api.service.UserService;
 
 @RestController
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @GetMapping("/users")
-    public Iterable<User> getAll() throws SQLException {
-        return userRepository.findAll();
+    public ResponseEntity<Iterable<User>> getAll() throws SQLException {
+        return new ResponseEntity<>(userService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/users/{id}")
-    public Optional<User> get(@PathVariable("id") long id) throws SQLException {
-        return userRepository.findById(id);
+    public ResponseEntity<User> get(@PathVariable("id") long id, HttpServletResponse response) throws SQLException {
+    	User user = userService.get(id);
+    	if(user != null) {
+    		return new ResponseEntity<>(user, HttpStatus.OK);
+    	}
+
+    	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/users")
-    public void save(@RequestBody User user) throws SQLException {
-        userRepository.save(user);
+    public void save(@RequestBody User user) {
+        userService.save(user);
     }
 
     @PutMapping("/users/{id}")
-    public void update(@PathVariable("id") long id, @RequestBody User user) throws SQLException {
+    public void update(@PathVariable("id") long id, @RequestBody User user) {
         user.setId(id);
-        userRepository.save(user);
+        userService.save(user);
     }
 
     @DeleteMapping("/users/{id}")
-    public void delete(@PathVariable("id") long id) throws SQLException {
-        userRepository.deleteById(id);
+    public void delete(@PathVariable("id") long id) {
+        userService.delete(id);
     }
 }
