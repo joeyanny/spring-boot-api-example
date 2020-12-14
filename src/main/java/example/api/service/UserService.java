@@ -19,21 +19,21 @@ import example.api.transformer.UserTransformer;
 @Service
 public class UserService {
 
-	@Autowired
+    @Autowired
     private UserRepository userRepository;
 
-	@Autowired
+    @Autowired
     private UserTransformer userTransformer;
 
-	/**
+    /**
      * Query the data source to retrieve a list of users.
      * 
      * @return users
      * @throws SQLException
      */
     public List<User> getAll() throws ServiceException {
-		Iterable<UserEntity> entityList = userRepository.findAll();
-		return userTransformer.transform(entityList);
+        Iterable<UserEntity> entityList = userRepository.findAll();
+        return userTransformer.transform(entityList);
     }
 
     /**
@@ -44,8 +44,8 @@ public class UserService {
      * @throws SQLException
      */
     public User get(long id) throws ServiceException {
-		Optional<UserEntity> entity = userRepository.findById(id);
-		return userTransformer.transform(entity);
+        Optional<UserEntity> entity = userRepository.findById(id);
+        return userTransformer.transform(entity);
     }
 
     /**
@@ -56,8 +56,8 @@ public class UserService {
      * @throws SQLException
      */
     public void save(User user) throws ServiceException {
-		UserEntity entity = userTransformer.transform(user);
-		userRepository.save(entity);
+        UserEntity entity = userTransformer.transform(user);
+        userRepository.save(entity);
     }
 
     /**
@@ -69,8 +69,8 @@ public class UserService {
      * @throws SQLException
      */
     public void update(User user) throws ServiceException {
-		UserEntity entity = userTransformer.transform(user);
-		userRepository.save(entity);
+        UserEntity entity = userTransformer.transform(user);
+        userRepository.save(entity);
     }
 
     /**
@@ -80,6 +80,6 @@ public class UserService {
      * @throws SQLException
      */
     public void delete(long id) throws ServiceException {
-		userRepository.deleteById(id);
+        userRepository.deleteById(id);
     }
 }

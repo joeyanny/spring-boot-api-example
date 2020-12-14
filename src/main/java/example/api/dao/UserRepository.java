@@ -3,7 +3,7 @@ package example.api.dao;
 import org.springframework.data.repository.CrudRepository;
 
 /**
- * Data access object for integrating with the data source
+ * Data access object for integrating with the data store
  * for storing and retrieving user data.
  * 
  * Spring Data JPA will automatically create the implementation

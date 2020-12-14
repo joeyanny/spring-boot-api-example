@@ -31,12 +31,12 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     public ResponseEntity<User> get(@PathVariable("id") long id, HttpServletResponse response) throws SQLException {
-    	User user = userService.get(id);
-    	if(user != null) {
-    		return new ResponseEntity<>(user, HttpStatus.OK);
-    	}
+        User user = userService.get(id);
+        if(user != null) {
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
 
-    	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/users")
