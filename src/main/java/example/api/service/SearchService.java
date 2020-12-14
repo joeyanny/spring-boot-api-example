@@ -33,17 +33,64 @@ public class SearchService {
     private UserTransformer userTransformer;
 
     /**
-     * Perform a search for users with the optional filters
+     * Perform a search for users with optional filters using
+     * an {@link Example}. This will ignore any null fields
+     * when filtering.
      * 
-     * @param searchFilters
+     * @param search Data for configuring the search (pagination, sorting and filtering)
+     * @return results Result data (list of users and paging)
      */
     public UserSearchResults search(UserSearchRequest search) {
-        // Create pagination, sorting and filter criteria
+        // Create pagination and sorting criteria
         Pageable pageable = searchTransformer.transformSearchPagingRequest(search);
+
+        // Create filtering criteria (Exact matching only. Null fields will be ignored)
         Example<UserEntity> searchEntity = searchTransformer.transformSearchCriteria(search.getFilters());
 
-        // Perform search
+        // Perform search with pagination and ordering
         Page<UserEntity> results = repository.findAll(searchEntity, pageable);
+
+        // Transform results of search from data store models into API models
+        List<User> users = userTransformer.transform(results.toList());
+        UserSearchResultsPaging resultPaging = searchTransformer.transformSearchPagingResult(results);
+
+        return new UserSearchResults(users, resultPaging);
+    }
+
+    /**
+     * Perform a search for users with the optional filters
+     * using a JPA entity query.
+     * 
+     * @param search Data for configuring the search (pagination, sorting and filtering)
+     * @return results Result data (list of users and paging)
+     */
+    public UserSearchResults searchWithJPA(UserSearchRequest search) {
+        // Create pagination and sorting criteria
+        Pageable pageable = searchTransformer.transformSearchPagingRequest(search);
+
+        // Perform search with pagination and ordering
+        Page<UserEntity> results = repository.customJPAQuery(search.getFilters().getFirstName(), search.getFilters().getLastName(), pageable);
+
+        // Transform results of search from data store models into API models
+        List<User> users = userTransformer.transform(results.toList());
+        UserSearchResultsPaging resultPaging = searchTransformer.transformSearchPagingResult(results);
+
+        return new UserSearchResults(users, resultPaging);
+    }
+
+    /**
+     * Perform a search for users with the optional filters
+     * using a native SQL query.
+     * 
+     * @param search Data for configuring the search (pagination, sorting and filtering)
+     * @return results Result data (list of users and paging)
+     */
+    public UserSearchResults searchWithSQL(UserSearchRequest search) {
+    	// Create pagination and sorting criteria
+        Pageable pageable = searchTransformer.transformSearchPagingRequest(search);
+
+        // Perform search with pagination and ordering
+        Page<UserEntity> results = repository.customSQLQuery(search.getFilters().getFirstName(), search.getFilters().getLastName(), pageable);
 
         // Transform results of search from data store models into API models
         List<User> users = userTransformer.transform(results.toList());

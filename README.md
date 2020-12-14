@@ -46,3 +46,21 @@ When the API is running visit `http://localhost:8080/swagger-ui/` to see the API
  ```
  curl -X DELETE http://localhost:8080/users/1
  ```
+ 
+ **Search using query by example**
+ 
+ ```
+curl -X POST http://localhost:8080/users/search -H 'Content-Type: application/json' -d '{"filters": {"firstName": "test"},"paging": {"limit": 10,"page": 0},"sort": {"order": "firstName"}}'
+ ```
+ 
+  **Search using JPA entity query**
+ 
+ ```
+curl -X POST http://localhost:8080/users/search/jpa -H 'Content-Type: application/json' -d '{"filters": {"firstName": "test"},"paging": {"limit": 10,"page": 0},"sort": {"order": "firstName"}}'
+ ```
+ 
+  **Search using SQL query**
+ 
+ ```
+curl -X POST http://localhost:8080/users/search/sql -H 'Content-Type: application/json' -d '{"filters": {"firstName": "test"},"paging": {"limit": 10,"page": 0},"sort": {"order": "first_name"}}'
+ ```
