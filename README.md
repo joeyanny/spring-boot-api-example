@@ -11,6 +11,9 @@
  
  **Note:** The `groupId` field in the `pom.xml` will need to be populated for the build to be successful.
  
+## Swagger API documentation
+When the API is running visit `http://localhost:8080/swagger-ui/` to see the API documentation rendered using Swagger.
+ 
 ## Testing application
  Make an API request to the following URLs to test the application:
  
